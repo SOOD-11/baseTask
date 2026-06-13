@@ -157,14 +157,12 @@ Host: localhost:3000
   {
     "id": 1,
     "name": "Item 1",
-    "description": "Description of item 1",
     "createdAt": "2026-06-13T10:00:00Z",
     "updatedAt": "2026-06-13T10:00:00Z"
   },
   {
     "id": 2,
     "name": "Item 2",
-    "description": "Description of item 2",
     "createdAt": "2026-06-13T11:00:00Z",
     "updatedAt": "2026-06-13T11:00:00Z"
   }
@@ -200,7 +198,6 @@ Host: localhost:3000
   {
     "id": 1,
     "name": "Task Item 1",
-    "description": "A task description",
     "createdAt": "2026-06-13T10:00:00Z",
     "updatedAt": "2026-06-13T10:00:00Z"
   }
@@ -236,14 +233,12 @@ Host: localhost:3000
   {
     "id": 1,
     "name": "Item Created Today",
-    "description": "Created on 2026-06-13",
     "createdAt": "2026-06-13T10:30:00Z",
     "updatedAt": "2026-06-13T10:30:00Z"
   },
   {
     "id": 3,
     "name": "Another Item",
-    "description": "Also created today",
     "createdAt": "2026-06-13T14:15:00Z",
     "updatedAt": "2026-06-13T14:15:00Z"
   }

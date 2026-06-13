@@ -264,6 +264,20 @@ Host: localhost:3000
 
 ---
 
+# Items Management System
+
+## All Items
+
+![All Items](./screenshots/PHOTO-2026-06-13-22-02-23.jpg))
+
+## Search By Name
+
+![Search](./screenshots/PHOTO-2026-06-13-22-00-48.jpg)
+
+## Filter By Date
+
+![Date Filter](./screenshots/PHOTO-2026-06-13-22-03-01.jpg)
+
 ## 🗂️ Project Structure
 
 ```

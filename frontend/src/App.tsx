@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Itemspage from "./api/Itemspage";
 
 // 1. Define Item type (match your DB model)
 type Item = {
@@ -59,59 +60,7 @@ const App = () => {
     <div style={{ padding: "20px" }}>
       <h2>Items Dashboard</h2>
 
-      {/* SEARCH */}
-      <div>
-        <input
-          type="text"
-          placeholder="Search by name"
-          value={name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setName(e.target.value)
-          }
-        />
-        <button onClick={searchByName}>Search</button>
-      </div>
-
-      {/* DATE FILTER */}
-      <div style={{ marginTop: "10px" }}>
-        <input
-          type="date"
-          value={date}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setDate(e.target.value)
-          }
-        />
-        <button onClick={filterByDate}>Filter</button>
-      </div>
-
-      {/* RESET */}
-      <div style={{ marginTop: "10px" }}>
-        <button onClick={fetchAllItems}>Reset</button>
-      </div>
-
-      {/* ITEMS LIST */}
-      <div style={{ marginTop: "20px" }}>
-        {items.length === 0 ? (
-          <p>No items found</p>
-        ) : (
-          items.map((item: Item) => (
-            <div
-              key={item.id}
-              style={{
-                border: "1px solid #ccc",
-                margin: "10px",
-                padding: "10px",
-              }}
-            >
-              <h4>{item.name}</h4>
-              <p>ID: {item.id}</p>
-              <p>
-                Created: {new Date(item.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-          ))
-        )}
-      </div>
+<Itemspage></Itemspage>
     </div>
   );
 };

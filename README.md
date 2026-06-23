@@ -1,63 +1,127 @@
-# BaseTask - Full Stack Application
+# API Reference (concise)
 
-A full-stack web application built with **React + TypeScript** (Frontend) and **Express.js + Sequelize** (Backend) for managing tasks and items with advanced search and filtering capabilities.
+Base paths:
+- Items: `/api/items`
+- Events: `/api/events`
 
-## 📋 Project Overview
-
-This project is a task management system with:
-- **Frontend**: React 19 with TypeScript, Vite, and Axios for API communication
-- **Backend**: Node.js with Express.js, MySQL database, and Sequelize ORM
-- **Features**: Get all items, search by name, filter by date
+All responses are JSON unless noted.
 
 ---
 
-## 🛠️ Tech Stack
+**Items**
 
-### Frontend
-- React 19.2.6
-- TypeScript
-- Vite (build tool)
-- Axios (HTTP client)
-- ESLint (code linting)
+- GET /api/items/
+  - Description: Return all items.
+  - Query: none
+  - Success: 200 OK
+    - Body: Array of item objects
+      - Example: `[{ id, name, createdAt, ... }, ...]`
+  - Errors: 500 Internal Server Error -> `{ error: <message> }`
 
-### Backend
-- Node.js
-- Express.js 5.2.1
-- MySQL 2 with Sequelize ORM
-- CORS support
-- Environment variables with dotenv
+- GET /api/items/search?name=<string>
+  - Description: Search items by partial `name` (LIKE %name%).
+  - Query: `name` (required)
+  - Success: 200 OK -> array of matching items
+  - Errors: 500 -> `{ error: <message> }`
 
----
-
-## 📦 Installation & Setup
-
-### Prerequisites
-- **Node.js** (v16 or higher)
-- **npm** or **yarn**
-- **MySQL** database server running locally or remotely
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/SOOD-11/baseTask.git
-cd baseTask
-```
+- GET /api/items/by-date?date=YYYY-MM-DD
+  - Description: Return items created on `date` (UTC, uses start-of-day to next day exclusive).
+  - Query: `date` (required, ISO date string)
+  - Success: 200 OK -> array of items
+  - Errors: 500 -> `{ error: <message> }`
 
 ---
 
-## 🚀 Backend Setup
+**Events**
 
-### 1. Navigate to Backend Directory
+- POST /api/events/create-event
+  - Description: Create an event (multipart/form-data).
+  - Content-Type: `multipart/form-data`
+  - Form fields (required):
+    - `name` (string) - min length 3
+    - `eventType` (string) - one of: COMEDY, SEMINAR, WORKSHOP, SPORTS, HACKATHON, CONCERT
+    - `eventDate` (string/date)
+    - `Venue` (string)
+    - `Description` (string)
+  - File fields:
+    - `banner` (file) - single file (field name `banner`)
+  - Validation layers:
+    1. Multer parses `multipart/form-data` and provides `req.files`.
+    2. `express-validator` (route) enforces `name` length and `eventType` allowed values.
+    3. Controller-level check rejects any empty required fields.
+    4. Cloudinary upload: file is uploaded; failure returns 404 error.
+  - Success: 201 Created
+    - Body: created event object (database record)
+  - Failure cases:
+    - 400 Bad Request -> validation errors: `{ errors: [ { msg, param, ... }, ... ] }`
+    - 400 Bad Request -> controller missing fields: `{ success:false, message: "fill all the event details" }`
+    - 404 Not Found -> file upload failure: `{ success:false, message: "not uploaded " }`
+    - 500 Internal Server Error -> `{ success:false, message: <message> }`
+
+- DELETE /api/events/delete-event/:id
+  - Description: Delete event by `id` (path param).
+  - Path: `:id` (required)
+  - Success: 200 OK -> `{ message: "event deleted succsessfully" }`
+  - Errors:
+    - 404 Not Found -> `{ success:false, message: "eevent not found" }`
+    - 500 -> `{ success:false, message: <message> }`
+
+- PATCH /api/events/update-event/:id
+  - Description: Update event by `id`. Accepts `multipart/form-data` to replace `banner` and body fields to update other fields.
+  - Path: `:id` (required)
+  - Form fields (optional): any of `name`, `eventType`, `eventDate`, `Venue`, `Description`
+  - File fields (optional): `banner` (single file) — if provided, uploaded and `bannerUrl` saved.
+  - Success: 200 OK -> `{ message: "event updated succsessfully" }`
+  - Errors:
+    - 404 Not Found -> `{ success:false, message: "event not found" }`
+    - 500 -> `{ success:false, message: <message> }`
+
+- GET /api/events/get-events
+  - Description: Return all events.
+  - Success: 200 OK
+    - Body: `{ Events: [ { id, Name, eventType, eventDate, Venue, bannerUrl, ... }, ... ] }`
+  - Errors:
+    - 404 -> `{ success:false, message: "No events listed" }` (controller throws)
+    - 500 -> `{ success:false, message: <message> }`
+
+---
+
+Error handling (concise):
+- `asyncHandler` wraps controllers and returns responses: `res.status(error.statusCode||500).json({ success:false, message: error?.message || 'Internal server error' })`.
+- Route-level validation errors return `400` with `{ errors: [...] }` from `express-validator`.
+- Items controller returns `500` with `{ error: <message> }` on DB errors.
+
+Validation layers (ordered, concise):
+1. Multer (middleware) — parses multipart/form-data and provides `req.files`.
+2. express-validator (route) — schema checks (e.g. `name` length, `eventType` allowed values).
+3. Controller-level checks — required-field presence and non-empty strings.
+4. External upload (Cloudinary) — upload may fail and triggers ApiError with 404 or other status.
+5. asyncHandler centralizes thrown errors to consistent JSON responses.
+
+---
+
+# Quick: Run Backend & Frontend (concise)
+
+Backend (start server on port 3000):
 ```bash
 cd backend
-```
-
-### 2. Install Dependencies
-```bash
 npm install
+# set environment variables (use example.env as template)
+node server.js
 ```
 
-### 3. Create Environment Variables
+Frontend (start dev server):
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+Notes:
+- API base paths are mounted in `backend/server.js` as `/api/items` and `/api/events`.
+- All responses are JSON; errors follow the shapes described above.
 Copy the example environment file and update with your database credentials:
 ```bash
 cp example.env .env

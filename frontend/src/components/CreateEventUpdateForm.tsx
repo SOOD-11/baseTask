@@ -13,7 +13,7 @@ enum EventType {
 type Event = {
   id: number;
   Name: string;
-  eventType: string,
+  eventType: string;
   eventDate: string;
   eventDescription: string;
   Venue: string;
@@ -26,11 +26,7 @@ type UpdateEventProps = {
   onClose: () => void;
 };
 
-const UpdateEventForm = ({
-  event,
-  onSuccess,
-  onClose,
-}: UpdateEventProps) => {
+const UpdateEventForm = ({ event, onSuccess, onClose }: UpdateEventProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -63,20 +59,19 @@ const UpdateEventForm = ({
         form.append("banner", banner);
       }
 
-     const response= await axios.patch(
+      const response = await axios.patch(
         `${import.meta.env.VITE_BASE_URL}/events/update-event/${event.id}`,
         form,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       console.log(response);
 
       onSuccess();
       onClose();
-
     } catch (error: any) {
       const message =
         error.response?.data?.message ||
@@ -91,19 +86,14 @@ const UpdateEventForm = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-xl shadow-xl flex flex-col gap-4 w-[600px]"
       >
-        <h2 className="text-2xl font-bold">
-          Update Event
-        </h2>
+        <h2 className="text-2xl font-bold">Update Event</h2>
 
         {error && (
-          <div className="bg-red-100 text-red-600 p-2 rounded">
-            {error}
-          </div>
+          <div className="bg-red-100 text-red-600 p-2 rounded">{error}</div>
         )}
 
         <img
@@ -136,10 +126,7 @@ const UpdateEventForm = ({
           className="border p-2 rounded"
         >
           {Object.values(EventType).map((type) => (
-            <option
-              key={type}
-              value={type}
-            >
+            <option key={type} value={type}>
               {type}
             </option>
           ))}
@@ -210,7 +197,6 @@ const UpdateEventForm = ({
           </button>
         </div>
       </form>
-
     </div>
   );
 };

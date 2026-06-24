@@ -3,16 +3,10 @@ import axios from "axios";
 import Itemspage from "./api/Itemspage";
 import Eventspage from "./api/eventsPage";
 
-
-
 const App = () => {
-
-
   return (
     <div style={{ padding: "20px" }}>
-     
-
-<Eventspage></Eventspage>
+      <Eventspage></Eventspage>
     </div>
   );
 };

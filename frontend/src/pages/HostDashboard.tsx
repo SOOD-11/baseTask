@@ -3,6 +3,7 @@ import axios from "axios";
 import CreateEventForm from "../components/CreateEventForm";
 
 import UpdateEventForm from "../components/CreateEventUpdateForm";
+import ShowEventsBooking from "../components/showEventsBooking";
 
 enum EventType {
   COMEDY = "COMEDY",
@@ -22,8 +23,8 @@ type Event = {
   bannerUrl: string;
 };
 
-const Eventspage = () => {
-  // this  variable is to fetch the events
+const HostDashboard = () => {
+
   const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState<string>();
   const [createForm, setshowCreateForm] = useState<boolean>(false);
@@ -31,6 +32,7 @@ const Eventspage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [updateForm, setShowUpdateForm] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>();
+  const [showBooking,setshowBooking]=useState(false);
 
   const handleDelete = async (id: number) => {
     try {
@@ -42,6 +44,9 @@ const Eventspage = () => {
       console.log(error);
     }
   };
+
+
+
   const getAllEvents = async () => {
     try {
       const response = await axios.get(
@@ -66,7 +71,14 @@ const Eventspage = () => {
           onClose={() => setshowCreateForm(false)}
         ></CreateEventForm>
       )}
+{showBooking && (
+<ShowEventsBooking 
+eventId={selectedEvent?.id}
+  onClose={() => setshowBooking(false)}
 
+/>
+
+)}
       {updateForm && selectedEvent && (
         <UpdateEventForm
           event={selectedEvent}
@@ -121,6 +133,16 @@ const Eventspage = () => {
                     >
                       update
                     </button>
+
+                     <button
+                      type="button"
+                      onClick={() => {
+                        (setSelectedEvent(Event), setshowBooking(true));
+                      }}
+                      className="border-2 bg-red-200"
+                    >
+                    View Bookings
+                    </button>
                   </div>
                 </div>
               );
@@ -131,4 +153,4 @@ const Eventspage = () => {
     </div>
   );
 };
-export default Eventspage;
+export default HostDashboard;

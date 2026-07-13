@@ -74,7 +74,7 @@ const updateEvent = asyncHandler(async (req, res, next) => {
 
 const getAllEvents = asyncHandler(async (req, res, next) => {
     const Events = await db.Event.findAll();
-
+    
     if (!Events) {
         throw new ApiError(404, "No events listed");
     }

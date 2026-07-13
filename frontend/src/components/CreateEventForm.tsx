@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import axiosInstance from "../utils/axiosInstance";
 
 enum EventType {
   COMEDY = "COMEDY",
@@ -45,8 +46,8 @@ const CreateEventForm = ({ onSuccess, onClose }: CreateEventProps) => {
 
       setLoading(true);
       setError("");
-      const submit = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/events/create-event`,
+      const submit = await axiosInstance.post(
+        `/events/create-event`,
         form,
         {
           headers: {

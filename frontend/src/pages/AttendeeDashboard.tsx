@@ -17,7 +17,7 @@ const AttendeeDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
-const[showBookings,setshowBookings]=useState(false);
+  const [showBookings, setshowBookings] = useState(false);
   const [showTicketCounter, setShowTicketCounter] = useState(false);
   const [ticketNumber, setTicketNumber] = useState(1);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -25,7 +25,7 @@ const[showBookings,setshowBookings]=useState(false);
   const getAllEvents = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/events/get-events`
+        `${import.meta.env.VITE_BASE_URL}/events/get-events-all`,
       );
 
       setEvents(response.data.Events);
@@ -38,12 +38,10 @@ const[showBookings,setshowBookings]=useState(false);
     getAllEvents();
   }, []);
 
-
   const handleRegister = (event: Event) => {
     setSelectedEvent(event);
     setShowTicketCounter(true);
   };
-
 
   const handleBookTicket = async () => {
     if (!selectedEvent) return;
@@ -70,29 +68,21 @@ const[showBookings,setshowBookings]=useState(false);
 
   return (
     <div>
-      <h1 className="text-blue-600 text-2xl font-bold mb-5">
-        Events Listed
-      </h1>
-<button type="button" onClick={()=>setshowBookings(true)} className="px-2 py-5 bg-green-600 text-2xl text-black"> MY BOOKINGS</button>
+      <h1 className="text-blue-600 text-2xl font-bold mb-5">Events Listed</h1>
+      <button
+        type="button"
+        onClick={() => setshowBookings(true)}
+        className="px-2 py-5 bg-green-600 text-2xl text-black"
+      >
+        {" "}
+        MY BOOKINGS
+      </button>
 
-{showBookings && (
-<ShowUserBooking
-
-onClose={()=> setshowBookings(false)}>
-
-
-
-
-</ShowUserBooking>
-
-
-
-
-)}
-
-
-
-
+      {showBookings && (
+        <ShowUserBooking
+          onClose={() => setshowBookings(false)}
+        ></ShowUserBooking>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {events.length === 0 ? (
@@ -124,9 +114,7 @@ onClose={()=> setshowBookings(false)}>
                       type="number"
                       min={1}
                       value={ticketNumber}
-                      onChange={(e) =>
-                        setTicketNumber(Number(e.target.value))
-                      }
+                      onChange={(e) => setTicketNumber(Number(e.target.value))}
                       className="border text-white p-2 my-3 w-full"
                     />
 

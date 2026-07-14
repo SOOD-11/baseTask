@@ -1,6 +1,7 @@
 # API Reference (concise)
 
 Base paths:
+
 - Items: `/api/items`
 - Events: `/api/events`
 
@@ -87,11 +88,13 @@ All responses are JSON unless noted.
 ---
 
 Error handling (concise):
+
 - `asyncHandler` wraps controllers and returns responses: `res.status(error.statusCode||500).json({ success:false, message: error?.message || 'Internal server error' })`.
 - Route-level validation errors return `400` with `{ errors: [...] }` from `express-validator`.
 - Items controller returns `500` with `{ error: <message> }` on DB errors.
 
 Validation layers (ordered, concise):
+
 1. Multer (middleware) — parses multipart/form-data and provides `req.files`.
 2. express-validator (route) — schema checks (e.g. `name` length, `eventType` allowed values).
 3. Controller-level checks — required-field presence and non-empty strings.
@@ -103,6 +106,7 @@ Validation layers (ordered, concise):
 # Quick: Run Backend & Frontend (concise)
 
 Backend (start server on port 3000):
+
 ```bash
 cd backend
 npm install
@@ -111,6 +115,7 @@ node server.js
 ```
 
 Frontend (start dev server):
+
 ```bash
 cd frontend
 npm install
@@ -120,14 +125,17 @@ npm run dev
 ---
 
 Notes:
+
 - API base paths are mounted in `backend/server.js` as `/api/items` and `/api/events`.
 - All responses are JSON; errors follow the shapes described above.
-Copy the example environment file and update with your database credentials:
+  Copy the example environment file and update with your database credentials:
+
 ```bash
 cp example.env .env
 ```
 
 Edit `.env` file with your database configuration:
+
 ```env
 DB_USER=your_mysql_user
 DB_PASS=your_mysql_password
@@ -136,16 +144,19 @@ DB_NAME=your_database_name
 ```
 
 ### 4. Run Database Migrations (if available)
+
 ```bash
 npx sequelize-cli db:migrate
 ```
 
 ### 5. Seed Database (if seeders available)
+
 ```bash
 npx sequelize-cli db:seed:all
 ```
 
 ### 6. Start Backend Server
+
 ```bash
 npm start
 ```
@@ -157,26 +168,31 @@ The backend server will start on **http://localhost:3000**
 ## 🎨 Frontend Setup
 
 ### 1. Navigate to Frontend Directory
+
 ```bash
 cd frontend
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Create Environment Variables
+
 ```bash
 cp example.env .env
 ```
 
 Update `.env` if needed (e.g., API base URL):
+
 ```env
 VITE_API_URL=http://localhost:3000
 ```
 
 ### 4. Run Development Server
+
 ```bash
 npm run dev
 ```
@@ -184,11 +200,13 @@ npm run dev
 The frontend will be available at **http://localhost:5173**
 
 ### 5. Build for Production
+
 ```bash
 npm run build
 ```
 
 ### 6. Preview Production Build
+
 ```bash
 npm run preview
 ```
@@ -198,6 +216,7 @@ npm run preview
 ## 📡 API Documentation
 
 ### Base URL
+
 ```
 http://localhost:3000/api/items
 ```
@@ -205,17 +224,20 @@ http://localhost:3000/api/items
 ### API Endpoints
 
 #### 1. Get All Items
+
 **Endpoint:** `GET /api/items/`
 
 **Description:** Retrieve all items from the database.
 
 **Request:**
+
 ```http
 GET /api/items/ HTTP/1.1
 Host: localhost:3000
 ```
 
 **Response (200 OK):**
+
 ```json
 [
   {
@@ -234,6 +256,7 @@ Host: localhost:3000
 ```
 
 **Error Response (500):**
+
 ```json
 {
   "error": "Error message"
@@ -243,20 +266,24 @@ Host: localhost:3000
 ---
 
 #### 2. Search Items by Name
+
 **Endpoint:** `GET /api/items/search?name=<search_term>`
 
 **Description:** Search for items by name using partial matching.
 
 **Request:**
+
 ```http
 GET /api/items/search?name=task HTTP/1.1
 Host: localhost:3000
 ```
 
 **Query Parameters:**
+
 - `name` (required, string): The search term to match against item names
 
 **Response (200 OK):**
+
 ```json
 [
   {
@@ -269,6 +296,7 @@ Host: localhost:3000
 ```
 
 **Error Response (500):**
+
 ```json
 {
   "error": "Error message"
@@ -278,20 +306,24 @@ Host: localhost:3000
 ---
 
 #### 3. Get Items by Date
+
 **Endpoint:** `GET /api/items/by-date?date=<YYYY-MM-DD>`
 
 **Description:** Retrieve all items created on a specific date.
 
 **Request:**
+
 ```http
 GET /api/items/by-date?date=2026-06-13 HTTP/1.1
 Host: localhost:3000
 ```
 
 **Query Parameters:**
+
 - `date` (required, string): Date in format YYYY-MM-DD
 
 **Response (200 OK):**
+
 ```json
 [
   {
@@ -310,6 +342,7 @@ Host: localhost:3000
 ```
 
 **Error Response (500):**
+
 ```json
 {
   "error": "Error message"
@@ -320,11 +353,11 @@ Host: localhost:3000
 
 ## 📝 API Summary Table
 
-| Method | Endpoint | Purpose | Query Parameters |
-|--------|----------|---------|------------------|
-| GET | `/api/items/` | Get all items | None |
-| GET | `/api/items/search` | Search items by name | `name` (required) |
-| GET | `/api/items/by-date` | Filter items by creation date | `date` (required, YYYY-MM-DD) |
+| Method | Endpoint             | Purpose                       | Query Parameters              |
+| ------ | -------------------- | ----------------------------- | ----------------------------- |
+| GET    | `/api/items/`        | Get all items                 | None                          |
+| GET    | `/api/items/search`  | Search items by name          | `name` (required)             |
+| GET    | `/api/items/by-date` | Filter items by creation date | `date` (required, YYYY-MM-DD) |
 
 ---
 
@@ -374,6 +407,7 @@ baseTask/
 ## 🔧 Development Commands
 
 ### Backend Commands
+
 ```bash
 cd backend
 
@@ -391,6 +425,7 @@ npx sequelize-cli db:seed:all
 ```
 
 ### Frontend Commands
+
 ```bash
 cd frontend
 
@@ -428,16 +463,19 @@ DB_NAME=basetask_db
 ## 🐛 Troubleshooting
 
 ### Backend won't start
+
 - Ensure MySQL is running
 - Check `.env` file has correct database credentials
 - Verify dependencies are installed: `npm install`
 
 ### Frontend won't connect to backend
+
 - Ensure backend is running on `http://localhost:3000`
 - Check CORS is enabled in `backend/server.js`
 - Verify `VITE_API_URL` in frontend `.env`
 
 ### Database errors
+
 - Check database exists and user has permissions
 - Run migrations: `npx sequelize-cli db:migrate`
 - Check `.sequelizerc` configuration file

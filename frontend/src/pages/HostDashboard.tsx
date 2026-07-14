@@ -4,6 +4,7 @@ import CreateEventForm from "../components/CreateEventForm";
 
 import UpdateEventForm from "../components/CreateEventUpdateForm";
 import ShowEventsBooking from "../components/showEventsBooking";
+import axiosInstance from "../utils/axiosInstance";
 
 enum EventType {
   COMEDY = "COMEDY",
@@ -24,7 +25,6 @@ type Event = {
 };
 
 const HostDashboard = () => {
-
   const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState<string>();
   const [createForm, setshowCreateForm] = useState<boolean>(false);
@@ -32,7 +32,7 @@ const HostDashboard = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [updateForm, setShowUpdateForm] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>();
-  const [showBooking,setshowBooking]=useState(false);
+  const [showBooking, setshowBooking] = useState(false);
 
   const handleDelete = async (id: number) => {
     try {
@@ -45,11 +45,9 @@ const HostDashboard = () => {
     }
   };
 
-
-
   const getAllEvents = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `${import.meta.env.VITE_BASE_URL}/events/get-events`,
       );
       setEvents(response.data.Events);
@@ -71,14 +69,12 @@ const HostDashboard = () => {
           onClose={() => setshowCreateForm(false)}
         ></CreateEventForm>
       )}
-{showBooking && (
-<ShowEventsBooking 
-eventId={selectedEvent?.id}
-  onClose={() => setshowBooking(false)}
-
-/>
-
-)}
+      {showBooking && (
+        <ShowEventsBooking
+          eventId={selectedEvent?.id}
+          onClose={() => setshowBooking(false)}
+        />
+      )}
       {updateForm && selectedEvent && (
         <UpdateEventForm
           event={selectedEvent}
@@ -134,14 +130,14 @@ eventId={selectedEvent?.id}
                       update
                     </button>
 
-                     <button
+                    <button
                       type="button"
                       onClick={() => {
                         (setSelectedEvent(Event), setshowBooking(true));
                       }}
                       className="border-2 bg-red-200"
                     >
-                    View Bookings
+                      View Bookings
                     </button>
                   </div>
                 </div>

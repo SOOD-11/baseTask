@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
-const db=require("../models");
+const db = require("../models");
 
 const Event = (sequelize, DataTypes) => {
   class Event extends Model {}
@@ -13,10 +13,10 @@ const Event = (sequelize, DataTypes) => {
 
   Event.associate = (db) => {
     Event.hasMany(db.Booking, {
-        foreignKey: "eventId",
-        onDelete: "CASCADE"
+      foreignKey: "eventId",
+      onDelete: "CASCADE",
     });
-};
+  };
   Event.init(
     {
       Name: DataTypes.STRING,
@@ -32,6 +32,7 @@ const Event = (sequelize, DataTypes) => {
       eventDate: DataTypes.DATE,
       Venue: DataTypes.STRING,
       eventDescription: DataTypes.TEXT,
+      userId: DataTypes.INTEGER
     },
     {
       sequelize,

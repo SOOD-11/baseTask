@@ -1,15 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 
-
-const axiosInstance=axios.create({
-baseURL:`${import.meta.env.VITE_BASE_URL}`,
-withCredentials:true,
-
-
+const axiosInstance = axios.create({
+  baseURL: `${import.meta.env.VITE_BASE_URL}`,
+  withCredentials: true,
 });
 
-
- /*axiosInstance.interceptors.request.use(
+/*axiosInstance.interceptors.request.use(
 (config)=>{
 
 const AccessToken=Cookies.get("AccessToken");
@@ -28,36 +24,23 @@ return config;
 */
 
 axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const orignalRequest = error.config;
 
+    if (error.response?.status === 401 && !orignalRequest._retry) {
+      orignalRequest._retry = true;
 
-    (response)=>response,
-    async (error)=>{
+      try {
+        await axiosInstance.post("/user/refresh-token");
 
-
-
-
-        const orignalRequest=error.config;
-
-
-        if(error.response?.status ===401 && !orignalRequest._retry){
-orignalRequest._retry=true;
-
-
-try {
-    await axiosInstance.post('/user/refresh-token');
-    
-    return axiosInstance(orignalRequest);
-    
-} catch (error) {
-
-    window.location.href='/login';
-    return Promise.reject(error)
-    
-}
-
-        }
+        return axiosInstance(orignalRequest);
+      } catch (error) {
+        window.location.href = "/login";
+        return Promise.reject(error);
+      }
     }
-
+  },
 );
 
 export default axiosInstance;

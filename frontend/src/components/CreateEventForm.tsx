@@ -46,15 +46,11 @@ const CreateEventForm = ({ onSuccess, onClose }: CreateEventProps) => {
 
       setLoading(true);
       setError("");
-      const submit = await axiosInstance.post(
-        `/events/create-event`,
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      const submit = await axiosInstance.post(`/events/create-event`, form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      );
+      });
 
       console.log(submit.data);
       onSuccess();

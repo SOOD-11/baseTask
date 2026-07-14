@@ -14,31 +14,30 @@ import SignUp from "./pages/SignUp";
 
 const App = () => {
   return (
+    <Routes>
+      <Route path="/login" element={<Login></Login>}></Route>
+        <Route path="/" element={<SignUp></SignUp>}></Route>
+      <Route path="/signUp" element={<SignUp></SignUp>}></Route>
+      <Route path="/host-signUp" element={<HostSignup></HostSignup>}></Route>
 
-  <Routes>
-<Route   path='/login' element={<Login></Login>}></Route>
-<Route path='/signUp' element={<SignUp></SignUp>}></Route>
-<Route path='/host-signUp' element={<HostSignup></HostSignup>} ></Route>
+      <Route
+        path="/all-events"
+        element={
+          <ProtectedRoutes role="ATTENDEE">
+            <AttendeeDashboard />
+          </ProtectedRoutes>
+        }
+      />
 
-
-<Route path='/all-events' element= {
- < ProtectedRoutes role="ATTENDEE">
-  <AttendeeDashboard/>
-</ProtectedRoutes>
-
-} />
-
-<Route path='/Dashboard' element= {
- < ProtectedRoutes role="HOST">
-  <HostDashboard/>
-</ProtectedRoutes>
-
-} />
-
-
-
-  </Routes>
-  
+      <Route
+        path="/Dashboard"
+        element={
+          <ProtectedRoutes role="HOST">
+            <HostDashboard />
+          </ProtectedRoutes>
+        }
+      />
+    </Routes>
   );
 };
 
